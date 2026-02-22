@@ -23,9 +23,23 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            perspective: 1200px;
         }
 
-        /* Police Tape Styling */
+        /* ONLY the background image moves */
+        .bg-image {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), 
+                        url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transition: transform 0.15s ease-out;
+        }
+
+        /* Police Tape - Locked to the screen */
         .police-tape {
             position: absolute;
             background: var(--police-yellow);
@@ -36,34 +50,31 @@
             justify-content: center;
             text-transform: uppercase;
             font-size: 1.2rem;
-            z-index: 1;
             pointer-events: none;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
             white-space: nowrap;
-            overflow: hidden;
             height: 50px;
+            z-index: 5; /* In front of BG, behind container */
         }
 
-        /* Main Crossing Tapes */
         #tape-main-1 { width: 150%; transform: rotate(-15deg); top: 30%; }
         #tape-main-2 { width: 150%; transform: rotate(10deg); bottom: 30%; background: #e6c200; }
 
-        /* Corner Tapes */
         .corner-tape { width: 600px; }
         #tape-tl { top: 0; left: 0; transform: rotate(-45deg) translate(-150px, -50px); }
         #tape-tr { top: 0; right: 0; transform: rotate(45deg) translate(150px, -50px); }
         #tape-bl { bottom: 0; left: 0; transform: rotate(45deg) translate(-150px, 50px); }
         #tape-br { bottom: 0; right: 0; transform: rotate(-45deg) translate(150px, 50px); }
 
+        /* THE MODAL BOX - Locked to center */
         .container {
             text-align: center;
-            z-index: 10;
-            transition: transform 0.1s ease-out;
+            z-index: 100;
             background: rgba(0,0,0,0.95);
             padding: 40px 80px;
             border: 4px solid var(--pk-blue);
             border-radius: 10px;
-            box-shadow: 0 0 50px rgba(60, 90, 166, 0.4);
+            box-shadow: 0 0 60px rgba(60, 90, 166, 0.5);
             position: relative;
         }
 
@@ -76,7 +87,6 @@
             font-weight: 900;
             font-size: 0.8rem;
             border-radius: 4px;
-            z-index: 11;
         }
         #s1 { top: -20px; left: -30px; transform: rotate(-20deg); }
         #s2 { bottom: -10px; right: -40px; transform: rotate(15deg); }
@@ -161,6 +171,8 @@
 </head>
 <body>
 
+    <div class="bg-image" id="moving-bg"></div>
+    
     <div class="police-tape" id="tape-main-1">DO NOT ENTER • CAUTION • DO NOT ENTER • CAUTION</div>
     <div class="police-tape" id="tape-main-2">RESTRICTED AREA • CRIME SCENE • RESTRICTED AREA</div>
     
@@ -169,7 +181,7 @@
     <div class="police-tape corner-tape" id="tape-bl">DO NOT ENTER</div>
     <div class="police-tape corner-tape" id="tape-br">DO NOT ENTER</div>
 
-    <div class="container" id="content">
+    <div class="container">
         <div class="sign" id="s1">DANGER</div>
         <div class="sign" id="s2">KEEP OUT</div>
         
@@ -191,11 +203,15 @@
     </div>
 
     <script>
-        const content = document.getElementById('content');
+        const movingBg = document.getElementById('moving-bg');
+
         document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 30;
-            const y = (window.innerHeight / 2 - e.pageY) / 30;
-            content.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
+            const sens = 30; // Control how much the background moves
+            const x = (window.innerWidth / 2 - e.pageX) / sens;
+            const y = (window.innerHeight / 2 - e.pageY) / sens;
+            
+            // Apply movement ONLY to the background image
+            movingBg.style.transform = `translateX(${x}px) translateY(${y}px) scale(1.1)`;
         });
     </script>
 </body>
