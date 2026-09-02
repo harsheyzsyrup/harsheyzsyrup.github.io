@@ -26,7 +26,7 @@
       perspective: 1200px;
     }
 
-    /* Background image */
+    /* Background image stays fixed */
     .bg-image {
       position: absolute;
       top: -10%; left: -10%;
@@ -36,8 +36,7 @@
       background-size: cover;
       background-position: center;
       z-index: -1;
-      transform: translateX(0px) translateY(0px) scale(1.1); /* default state */
-      transition: transform 0.15s ease-out;
+      transform: scale(1.1); /* static zoom */
     }
 
     /* Police Tape */
@@ -172,7 +171,7 @@
 </head>
 <body>
 
-  <div class="bg-image" id="moving-bg"></div>
+  <div class="bg-image"></div>
 
   <div class="police-tape" id="tape-main-1">DO NOT ENTER • CAUTION • DO NOT ENTER • CAUTION</div>
   <div class="police-tape" id="tape-main-2">RESTRICTED AREA • CRIME SCENE • RESTRICTED AREA</div>
@@ -203,16 +202,5 @@
     </div>
   </div>
 
-  <script>
-    const movingBg = document.getElementById('moving-bg');
-
-    document.addEventListener('mousemove', (e) => {
-      const sens = 30;
-      const x = (window.innerWidth / 2 - e.pageX) / sens;
-      const y = (window.innerHeight / 2 - e.pageY) / sens;
-
-      movingBg.style.transform = `translateX(${x}px) translateY(${y}px) scale(1.1)`;
-    });
-  </script>
 </body>
 </html>
